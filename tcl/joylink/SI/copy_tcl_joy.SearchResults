@@ -1,0 +1,9 @@
+---- device_aes_decrypt Matches (8 in 4 files) ----
+Aes.c (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\auth):int device_aes_decrypt(const uint8_t * key, int keyLength, const uint8_t * iv, const uint8_t *pEncIn, int encLength, uint8_t *pPlainOut, int maxOutLen)
+Aes.h (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\auth):int device_aes_decrypt(const uint8_t * key, int keyLength, const uint8_t * iv, const uint8_t *pEncIn, int encLength, uint8_t *pPlainOut, int maxOutLen);
+joylinkAES.c (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\auth):int device_aes_decrypt(const UINT8 * key, int keyLength, 
+Joylink_security.c (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\joylink):            ret_len = device_aes_decrypt(key, 16, key+16, p_in, in_len, p_out, maxlen);
+Joylink_security.c (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\joylink):		retLen = device_aes_decrypt(
+Joylink_security.c (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\joylink):		retLen = device_aes_decrypt(
+Joylink_security.c (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\joylink):            retLen = device_aes_decrypt((const uint8_t*)_g_pdev->jlp.localkey, 
+Joylink_security.c (f:\mxchip\sdk_micokit_v2.3.0.2_copy\sdk_micokit_v2.3.0.2\sdk_micokit_v2.3.0.2\demos\com.mxchip.spp\tcl\joylink\joylink):            retLen = device_aes_decrypt(secret,

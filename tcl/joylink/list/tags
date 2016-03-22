@@ -1,0 +1,88 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+E_LIST_ERROR	joylink_list.h	/^    E_LIST_ERROR = -1,$/;"	e	enum:__list_ret
+E_LIST_ERROR_PARAM_INVAILD	joylink_list.h	/^    E_LIST_ERROR_PARAM_INVAILD = -2$/;"	e	enum:__list_ret
+E_LIST_RET	joylink_list.h	/^}E_LIST_RET;$/;"	t	typeref:enum:__list_ret
+E_LIST_RET_OK	joylink_list.h	/^    E_LIST_RET_OK = 0,$/;"	e	enum:__list_ret
+IDNode_t	joylink_list.h	/^}IDNode_t;$/;"	t	typeref:struct:_id_node
+INIT_LIST_HEAD	yc_list.h	17;"	d
+JLJoinPacket_t	test.c	/^}JLJoinPacket_t;$/;"	t	typeref:struct:__join_packet	file:
+JL_JOIN_PKG_RUN	test.c	25;"	d	file:
+JL_JOIN_PKG_STOP	test.c	26;"	d	file:
+JL_MAX_JOIN_PKG_ARRARY	test.c	22;"	d	file:
+JL_MAX_JOIN_PKG_TOTAL_LEN	test.c	23;"	d	file:
+LHead_t	yc_list.h	/^typedef struct yc_list_head LHead_t;$/;"	t	typeref:struct:yc_list_head
+LIST_BOOL_FALSE	joylink_list.h	13;"	d
+LIST_BOOL_TRUE	joylink_list.h	14;"	d
+LIST_BOOL_t	joylink_list.h	/^typedef int LIST_BOOL_t;$/;"	t
+_YC_LLIST_H	yc_list.h	2;"	d
+__JD_LIST_H_	joylink_list.h	2;"	d
+__join_packet	test.c	/^typedef struct  __join_packet{$/;"	s	file:
+__join_packet::current_count	test.c	/^    int current_count;$/;"	m	struct:__join_packet	file:	access:public
+__join_packet::id	test.c	/^    int id;$/;"	m	struct:__join_packet	file:	access:public
+__join_packet::is_run	test.c	/^    int is_run;$/;"	m	struct:__join_packet	file:	access:public
+__join_packet::lhead	test.c	/^    LHead_t lhead;$/;"	m	struct:__join_packet	file:	access:public
+__join_packet::name	test.c	/^    char name[256];$/;"	m	struct:__join_packet	file:	access:public
+__join_packet::phead	test.c	/^    JLPacketHead_t phead;$/;"	m	struct:__join_packet	file:	access:public
+__join_packet::total_len	test.c	/^    int total_len;$/;"	m	struct:__join_packet	file:	access:public
+__list_ret	joylink_list.h	/^typedef enum __list_ret{$/;"	g
+_g_jps	test.c	/^JLJoinPacket_t _g_jps[JL_MAX_JOIN_PKG_ARRARY];$/;"	v
+_id_node	joylink_list.h	/^typedef struct _id_node	$/;"	s
+_id_node::data	joylink_list.h	/^    void *data;$/;"	m	struct:_id_node	access:public
+_id_node::id	joylink_list.h	/^	int32_t	id;$/;"	m	struct:_id_node	access:public
+_id_node::len	joylink_list.h	/^    int32_t len;$/;"	m	struct:_id_node	access:public
+_id_node::list	joylink_list.h	/^	LHead_t	list;$/;"	m	struct:_id_node	access:public
+current_count	test.c	/^    int current_count;$/;"	m	struct:__join_packet	file:	access:public
+data	joylink_list.h	/^    void *data;$/;"	m	struct:_id_node	access:public
+id	joylink_list.h	/^	int32_t	id;$/;"	m	struct:_id_node	access:public
+id	test.c	/^    int id;$/;"	m	struct:__join_packet	file:	access:public
+is_joylink_idnode_exist	joylink_list.c	/^is_joylink_idnode_exist(int32_t id, LHead_t *lhead)$/;"	f	signature:(int32_t id, LHead_t *lhead)
+is_joylink_idnode_exist	joylink_list.h	/^int32_t is_joylink_idnode_exist(int32_t id, LHead_t *lhead);$/;"	p	signature:(int32_t id, LHead_t *lhead)
+is_run	test.c	/^    int is_run;$/;"	m	struct:__join_packet	file:	access:public
+joylink_idnode_add	joylink_list.c	/^joylink_idnode_add(int32_t id, void *data, int32_t data_len, LHead_t *lhead)$/;"	f	signature:(int32_t id, void *data, int32_t data_len, LHead_t *lhead)
+joylink_idnode_add	joylink_list.h	/^int32_t joylink_idnode_add(int32_t id, void *data, int32_t data_len, LHead_t *lhead);$/;"	p	signature:(int32_t id, void *data, int32_t data_len, LHead_t *lhead)
+joylink_idnode_del	joylink_list.c	/^joylink_idnode_del(int32_t id, LHead_t *lhead)$/;"	f	signature:(int32_t id, LHead_t *lhead)
+joylink_idnode_del	joylink_list.h	/^int32_t joylink_idnode_del(int32_t id, LHead_t *lhead);$/;"	p	signature:(int32_t id, LHead_t *lhead)
+joylink_idnode_get_by_id	joylink_list.c	/^joylink_idnode_get_by_id(int32_t id, LHead_t *lhead)$/;"	f	signature:(int32_t id, LHead_t *lhead)
+joylink_idnode_get_by_id	joylink_list.h	/^IDNode_t * joylink_idnode_get_by_id(int32_t id, LHead_t *lhead);$/;"	p	signature:(int32_t id, LHead_t *lhead)
+joylink_idnode_list_clear	joylink_list.c	/^joylink_idnode_list_clear(LHead_t *lhead)$/;"	f	signature:(LHead_t *lhead)
+joylink_idnode_list_clear	joylink_list.h	/^int32_t joylink_idnode_list_clear(LHead_t *lhead);$/;"	p	signature:(LHead_t *lhead)
+joylink_idnode_list_debugp	joylink_list.c	/^joylink_idnode_list_debugp(LHead_t *lhead)$/;"	f	signature:(LHead_t *lhead)
+joylink_idnode_list_debugp	joylink_list.h	/^void joylink_idnode_list_debugp(LHead_t *lhead);$/;"	p	signature:(LHead_t *lhead)
+joylink_ids_get	joylink_list.c	/^joylink_ids_get(int32_t size, int32_t *pids, LHead_t *lhead)$/;"	f	signature:(int32_t size, int32_t *pids, LHead_t *lhead)
+joylink_ids_get	joylink_list.h	/^int joylink_ids_get(int32_t size, int32_t *pids, LHead_t *lhead);$/;"	p	signature:(int32_t size, int32_t *pids, LHead_t *lhead)
+joylink_join_pkg_add_data	test.c	/^joylink_join_pkg_add_data(char *name, int id, JLPacketHead_t *phead, char *data, int len)$/;"	f	signature:(char *name, int id, JLPacketHead_t *phead, char *data, int len)
+joylink_join_pkg_cache_new_node	test.c	/^joylink_join_pkg_cache_new_node(char *name, int id, JLPacketHead_t *phead, char *data, int len)$/;"	f	file:	signature:(char *name, int id, JLPacketHead_t *phead, char *data, int len)
+joylink_join_pkg_clean_node_by_name_id	test.c	/^joylink_join_pkg_clean_node_by_name_id(char *name, int id)$/;"	f	signature:(char *name, int id)
+joylink_join_pkg_get_idle_index	test.c	/^joylink_join_pkg_get_idle_index()$/;"	f	file:
+joylink_join_pkg_get_index_by_name_id	test.c	/^joylink_join_pkg_get_index_by_name_id(char *name, int id)$/;"	f	file:	signature:(char *name, int id)
+joylink_join_pkg_join_data	test.c	/^joylink_join_pkg_join_data(char *name, int id, int *out_len)$/;"	f	signature:(char *name, int id, int *out_len)
+len	joylink_list.h	/^    int32_t len;$/;"	m	struct:_id_node	access:public
+lhead	test.c	/^    LHead_t lhead;$/;"	m	struct:__join_packet	file:	access:public
+list	joylink_list.h	/^	LHead_t	list;$/;"	m	struct:_id_node	access:public
+list_entry	yc_list.h	112;"	d
+list_for_each	yc_list.h	132;"	d
+list_for_each_entry	yc_list.h	140;"	d
+list_for_each_entry_safe	yc_list.h	152;"	d
+main	test.c	/^int main()$/;"	f
+mem_get	joylink_list.h	16;"	d
+mem_put	joylink_list.h	17;"	d
+name	test.c	/^    char name[256];$/;"	m	struct:__join_packet	file:	access:public
+next	yc_list.h	/^	struct yc_list_head *next;$/;"	m	struct:yc_list_head	typeref:struct:yc_list_head::yc_list_head	access:public
+phead	test.c	/^    JLPacketHead_t phead;$/;"	m	struct:__join_packet	file:	access:public
+prev	yc_list.h	/^	struct yc_list_head *prev;$/;"	m	struct:yc_list_head	typeref:struct:yc_list_head::yc_list_head	access:public
+test_join_data	test.c	/^test_join_data()$/;"	f
+total_len	test.c	/^    int total_len;$/;"	m	struct:__join_packet	file:	access:public
+yc_list_add	yc_list.h	/^static inline void yc_list_add (struct yc_list_head *_new, struct yc_list_head *head)$/;"	f	signature:(struct yc_list_head *_new, struct yc_list_head *head)
+yc_list_add_tail	yc_list.h	/^static inline void yc_list_add_tail (struct yc_list_head *_new, struct yc_list_head *head)$/;"	f	signature:(struct yc_list_head *_new, struct yc_list_head *head)
+yc_list_del	yc_list.h	/^static inline void yc_list_del (struct yc_list_head *old)$/;"	f	signature:(struct yc_list_head *old)
+yc_list_del_init	yc_list.h	/^static inline void yc_list_del_init (struct yc_list_head *old)$/;"	f	signature:(struct yc_list_head *old)
+yc_list_empty	yc_list.h	/^static inline int yc_list_empty (struct yc_list_head *head)$/;"	f	signature:(struct yc_list_head *head)
+yc_list_head	yc_list.h	/^struct yc_list_head {$/;"	s
+yc_list_head::next	yc_list.h	/^	struct yc_list_head *next;$/;"	m	struct:yc_list_head	typeref:struct:yc_list_head::yc_list_head	access:public
+yc_list_head::prev	yc_list.h	/^	struct yc_list_head *prev;$/;"	m	struct:yc_list_head	typeref:struct:yc_list_head::yc_list_head	access:public
+yc_list_size	yc_list.h	/^static inline int yc_list_size(struct yc_list_head *head){$/;"	f	signature:(struct yc_list_head *head)
