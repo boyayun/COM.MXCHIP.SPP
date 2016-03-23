@@ -25,35 +25,33 @@ FifoTyp framerevfifo;				//数据接收FIFO
 	u8 uartsendbuf[UARTSENDLEN];		//串口发送BUFFER
 #endif
 
-FrameRevParaStu framerevpara;		//帧接收相关参数
-
 #define FRAMEREVCNT		100			//接收定时 单位:ms 不宜太大，绝对不能超过重发时间270MS
 #ifdef OLD
     #define FRAMESENDCNT	330			//重发定时 单位:ms
 #else
     #define FRAMESENDCNT	270			//重发定时 单位:ms
 #endif
-
 TimerParaStu framesendtimer; 		//帧发送定时器接口
 TimerParaStu framerevtimer; 		//帧接收定时器接口
 
 DataInterfaceStu dataup;			//设备数据上传接口
-FrameSendParaStu framesendpara;		//帧发送相关参数
+FrameRevParaStu framerevpara;		//帧接收相关参数
 
 DataInterfaceStu datadown;			//下行数据到设备接口
-
-const u8 cmdconfirm = CMDCONTROL;
-const u8 cmdrddevinfo = CMDRDDEVINFO;
-#define WORKMODELEN 3
-u8 workmode[WORKMODELEN] = {CMDRETWORKMODE, 0x10, 0x00};
-#define MODINFOLEN 14
-u8 modinfo[MODINFOLEN] = {CMDRETMODINFO, 0x01, 0x01, 16, 1, 30, 1, 16, 1, 30, 1, 0, 0, 0};
-#define LINKSTELEN 3
-u8 linkste[LINKSTELEN] = {CMDRETLINKSTE, 0x00, 0x01};
-u8 Uart1SendState;
+FrameSendParaStu framesendpara;		//帧发送相关参数
 
 #ifdef OLD
-u8 laststate[4];
+    u8 laststate[4];
+#else
+    const u8 cmdconfirm = CMDCONTROL;
+    const u8 cmdrddevinfo = CMDRDDEVINFO;
+    #define WORKMODELEN 3
+    u8 workmode[WORKMODELEN] = {CMDRETWORKMODE, 0x10, 0x00};
+    #define MODINFOLEN 14
+    u8 modinfo[MODINFOLEN] = {CMDRETMODINFO, 0x01, 0x01, 16, 1, 30, 1, 16, 1, 30, 1, 0, 0, 0};
+    #define LINKSTELEN 3
+    u8 linkste[LINKSTELEN] = {CMDRETLINKSTE, 0x00, 0x01};
+    u8 Uart1SendState;
 #endif
 
 void FrameDataHandle();
@@ -61,20 +59,20 @@ void RevCmdHandle();
 void SetDataDownState();
 void RevTimerHandle();
 
-#if DEBUGFRAMEREV
+#ifndef OS
 /******************************************
 Fun: 串口发送完中断处理
 Input: huart:串口号
 Output:void
 Return:void
 ******************************************/
-//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-//{
-//	if(&huart1 == huart)
-//	{
-//		Uart1SendState = 0;
-//	}
-//}
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(&huart1 == huart)
+	{
+		Uart1SendState = 0;
+	}
+}
 #endif
 
 /******************************************
@@ -366,14 +364,10 @@ void RevCmdHandle(void)
 					break;
 					
 					/*设备主动发给网关的命令*/
-				case CMDALARM:
-#ifdef OLD
-                      cmdflag = 1;
-                      break;
-#endif                      
+				case CMDALARM:                    
 				case CMDINFOREPORT:
-				case CMDRDENCRYPARA:
-					framesendpara.sendcmd.bit.confirm = 1;
+				case CMDRDENCRYPARA:                 
+					framesendpara.sendcmd.bit.confirm = 1;                    
 					cmdflag = 1;
 					break;
 					
@@ -419,6 +413,7 @@ void RevCmdHandle(void)
 	}
 }
 
+#ifndef OLD
 /******************************************
 Fun: 发送命令处理
 Input: void
@@ -432,7 +427,7 @@ void SendCmdHandle()
 		if(0 != framesendpara.sendcmd.bit.confirm)
 		{
 			if(DataDownWr((u8*)&cmdconfirm, 1))
-			{	
+			{
 				framesendpara.sendcmd.bit.confirm = 0;
 			}
 		}
@@ -466,6 +461,8 @@ void SendCmdHandle()
 		}
 	}
 }
+#endif
+
 /******************************************
 Fun: 完整帧数据处理
 Input: void
@@ -488,7 +485,7 @@ void FrameDataHandle()
 	u8 errortype = 0;
 
 	tempcrc = tempbuffer[templen-2]<<8 | tempbuffer[templen-1];//转换为小端模式
-	if(tempcrc != crc_cal(tempbuffer, (templen-2)))		//从帧头开始校验
+	if((tempcrc != crc_cal(tempbuffer, (templen-2)))	|| (0x55 == tempbuffer[8+2]))	//从帧头开始校验
 	{
 		errortype = 1;
 	}
@@ -650,7 +647,7 @@ _Bool SendData(u8 firstsend)
 		tempbuf[8+0] = 1;			//版本H
 		tempbuf[8+1] = 0;			//版本L
         tempbuf[8+2] = 0;			//开关机
-		tempbuf[8+6] = 11;			//网络状态
+		tempbuf[8+10] = 11;			//网络状态
 
 		memcpy(&tempbuf[11], laststate, 4);	//上次的状态
 		
@@ -692,7 +689,7 @@ _Bool SendData(u8 firstsend)
 		}
 		else if(5023 == funindex)		//定时
 		{
-			tempbuf[8+5] = datadown.framedata.data[5];
+			tempbuf[8+6] = datadown.framedata.data[5];
 		}
 
 		u16 tempcrc;
@@ -817,23 +814,22 @@ void DatadownHandle(void)
 			return;
 		}
 #ifdef OLD
-        datadown.state = 0;
-//        if(11 == datadown.framedata.data[4])
-//        {
-//            datadown.state = 3;
-//            APIReloadTimer(&framesendtimer, FRAMESENDCNT);
-//            APIStartTimer(&framesendtimer);
-//        }
-//        else
-//        {
-//            datadown.state = 0;
-//            APIStopTimer(&framesendtimer);
-//            
-//            u8 tempbuf[5] = {0};
-//            tempbuf[0] = CMDCONTROL;	//控制 
-//            tempbuf[4] = 11;			//查询
-//            DataDownWr(tempbuf, 5);		//发送查询指令
-//        }
+        if(11 == datadown.framedata.data[4])
+        {
+            datadown.state = 3;
+            APIReloadTimer(&framesendtimer, FRAMESENDCNT);
+            APIStartTimer(&framesendtimer);
+        }
+        else
+        {
+            datadown.state = 0;
+            APIStopTimer(&framesendtimer);
+            
+            u8 tempbuf[5] = {0};
+            tempbuf[0] = CMDCONTROL;	//控制 
+            tempbuf[4] = 11;			//查询
+            DataDownWr(tempbuf, 5);		//发送查询指令
+        }
 #else       
 		switch(datadown.framedata.data[0])
 		{
@@ -849,10 +845,9 @@ void DatadownHandle(void)
 			
 		case CMDCONTROL:
 		case CMDINFOREPORTCFG:
-//		case CMDCHECKSTE:
 		case CMDRDDEVID:
 		case CMDRDDEVINFO:
-			//			case CMDBPSTEST:				
+//		case CMDBPSTEST:				
 		case CMDDEVRST:
 		case CMDRDDEVPROFILE:
 		case CMDWRDEVPROFILE:
@@ -879,39 +874,39 @@ Return:void
 #ifndef OS
 void Uart1DataHandle(void)
 {
-//	if(1 != Uart1SendState)		//FIFO数据通过串口发出
-//	{
-//		if(0 != modsendfifo.Datalen)
-//		{
-//			u16 len;
-//			
-//			Uart1SendState = 1;
-//			len = FifoOutput(uartsendbuf, &modsendfifo, UARTSENDLEN);
-//			HAL_UART_Transmit_IT(&huart1, uartsendbuf, len);
-//		}
-//	}
-//	if(0 != modsendfifo.Datalen)
-//	{
-//		u8 c;
-//		FifoOutput(&c, &modsendfifo, 1);
-//		UART_PutChar (UART1, c); 
-//		//HAL_UART_Transmit_IT(&huart1, uartsendbuf, len);
-//	}
+	if(1 != Uart1SendState)		//FIFO数据通过串口发出
+	{
+		if(0 != modsendfifo.Datalen)
+		{
+			u16 len;
+			
+			Uart1SendState = 1;
+			len = FifoOutput(uartsendbuf, &modsendfifo, UARTSENDLEN);
+			HAL_UART_Transmit_IT(&huart1, uartsendbuf, len);
+		}
+	}
+	if(0 != modsendfifo.Datalen)
+	{
+		u8 c = 0;
+		FifoOutput(&c, &modsendfifo, 1);
+		UART_PutChar (UART1, c); 
+		//HAL_UART_Transmit_IT(&huart1, uartsendbuf, len);
+	}
 }
 #endif
 
 /******************************************
-//Fun: 帧处理回调函数
-//Input: datalen:cmd+data的长度;data:cmd与data的buf地址
-//Output:void
-//Return:0:数据没处理 1:数据已处理
-//******************************************/
-//__weak _Bool AppHandleCallback(u8* data, u8 datalen)
-//{
-//	/*用户自己填写*/
-//	PrintfMem((u8*)&dataup, (dataup.framedata.datalen+4));
-//	return 1;
-//}
+Fun: 帧处理回调函数
+Input: datalen:cmd+data的长度;data:cmd与data的buf地址
+Output:void
+Return:0:数据没处理 1:数据已处理
+******************************************/
+__weak _Bool AppHandleCallback(u8* data, u8 datalen)
+{
+	/*用户自己填写*/
+	PrintfMem((u8*)&dataup, (dataup.framedata.datalen+4));
+	return 1;
+}
 
 /******************************************
 Fun: 判断数据状态
@@ -937,7 +932,7 @@ Input: void
 Output:void
 Return:void
 ******************************************/
-void InitDataUpState()
+inline void InitDataUpState()
 {
 	dataup.state = 0;
 }
@@ -963,6 +958,7 @@ _Bool DataDownWr(u8* data, u8 datalen)
 	}
 	return 0;
 }
+
 /******************************************
 Fun: 帧处理主循环
 Input: void
@@ -989,7 +985,10 @@ void FrameHandle()
 #endif
 	
 	DatadownHandle();
+
+#ifndef OLD
 	SendCmdHandle();
+#endif
     
 #ifndef OS
 	Uart1DataHandle();
@@ -1005,8 +1004,8 @@ Return:void
 ******************************************/
 void UartInit()
 {
-	//	HAL_UART_Receive_IT(&huart1, uart1revbyte, REVBYTES);
-	//__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+	HAL_UART_Receive_IT(&huart1, uart1revbyte, REVBYTES);
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
 }
 
 /******************************************
@@ -1021,7 +1020,13 @@ void DevHardInit()
 }
 #endif
 
-TimerParaStu testtimer;
+TimerParaStu testtimer;			//状态查询定时器
+/******************************************
+Fun: 状态查询定时处理
+Input: void
+Output:void
+Return:void
+******************************************/
 void TimerTest(void* arg)
 {
 	datadown.state = 0;
@@ -1030,6 +1035,7 @@ void TimerTest(void* arg)
 	tempbuf[4] = 11;			//查询
 	DataDownWr(tempbuf, 5); 	//发送查询指令
 }
+
 /******************************************
 Fun: 参数初始化
 Input: void
@@ -1038,7 +1044,7 @@ Return:void
 ******************************************/
 void DevParaInit()
 {
-	APIInitTimer(&testtimer, 2000, (void*)TimerTest, NULL);			//测试定时器
+	APIInitTimer(&testtimer, 1000, (void*)TimerTest, NULL);			//测试定时器
 	APIStartTimer(&testtimer);
 
 	datadown.framehead[0] = 0xf5;		//帧头
@@ -1048,7 +1054,7 @@ void DevParaInit()
 	APIInitTimer(&framerevtimer, FRAMEREVCNT, (void*)RevTimerUp, NULL);			//绑定接收定时器
 	APIInitTimer(&framesendtimer, FRAMESENDCNT, (void*)SendTimerUp, NULL);		//绑定发送定时器
 	
-	FifoInit(&framerevfifo, revfifobuf, REVFIFOLEN);								//初始化接收FIFO
+	FifoInit(&framerevfifo, revfifobuf, REVFIFOLEN);							//初始化接收FIFO
 	
 #ifndef OS
 	FifoInit(&modsendfifo, sendfifobuf, SENDFIFOLEN);							//初始化发送FIFO

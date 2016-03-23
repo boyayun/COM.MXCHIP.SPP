@@ -2835,7 +2835,7 @@ void tcl_data_upload(unsigned char *buf, int len, struct sockaddr_t *paddr)
 		g_user_uart_stats.flag=0;
 	  #if BIG_LITTLE
 		//	  h->len=htons(h->len);
-        if(g_mySendBuf_last[4] = FRAME_WARN)
+        if(FRAME_WARN == g_mySendBuf_last[4])
         {
             h->cmd=htons(ALAM_DATA);
         }
@@ -2987,8 +2987,6 @@ void tcl_data_upload_test(unsigned char *buf, int len, struct sockaddr_t *paddr)
    h->cmd=(REPORT_DATA);
 			  mySend_uart(buf,sizeof(IotHead)+g_mySendBuf_last[3]-2,paddr);
 	  #endif
-
-
 }
 
 void tcl_data_tpyeid_ack(unsigned char *buf, int len, struct sockaddr_t *paddr)
